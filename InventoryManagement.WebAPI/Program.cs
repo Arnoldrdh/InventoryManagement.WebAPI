@@ -1,8 +1,15 @@
+using InventoryManagement.WebAPI.Services;
+using InventoryManagement.WebAPI.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ProductRepository, ProductRepository>();
+
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen(); 
