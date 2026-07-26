@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 using InventoryManagement.WebAPI.Services;
 using InventoryManagement.WebAPI.Repositories;
+using InventoryManagement.WebAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ProductRepository, ProductRepository>();
-
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(
+    builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

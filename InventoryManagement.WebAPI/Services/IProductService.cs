@@ -6,12 +6,16 @@ namespace InventoryManagement.WebAPI.Services
     public interface IProductService
     {
 
-        List<ProductResponse> GetAllProduct();
-        ProductResponse? GetById(int id);
-        ProductResponse? Create(ProductRequest request);
-        ProductResponse? Update(int id, ProductRequest request);
-        bool Delete(int id);
+        Task<List<ProductResponse>> GetAllProducts();
 
-        
+        Task<ProductResponse?> GetById(int id);
+
+        Task<ProductResponse> Create(ProductRequest request);
+
+        Task<ProductResponse?> Update(int id, ProductRequest request);
+
+        Task<bool> Delete(int id);
+
+
     }
 }

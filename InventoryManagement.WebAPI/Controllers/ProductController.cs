@@ -19,17 +19,17 @@ namespace InventoryManagement.WebAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> GetAll()
         {
-            var products = _productService.GetAllProduct();
+            var products = await _productService.GetAllProducts();
             return Ok(products); 
         }
 
 
         [HttpGet("{id:int}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var product = _productService.GetById(id);
+            var product = await _productService.GetById(id);
             
             if(product == null)
             {
@@ -40,16 +40,16 @@ namespace InventoryManagement.WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ProductRequest request)
+        public async Task<IActionResult> Create(ProductRequest request)
         {
-            var product = _productService.Create(request);
+            var product = await _productService.Create(request);
             return Ok(product);
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult Update(int id, ProductRequest request)
+        public async Task<IActionResult >Update(int id, ProductRequest request)
         {
-            var product = _productService.Update(id,request);
+            var product = await _productService.Update(id,request);
 
             if (product == null)
             {
@@ -61,9 +61,9 @@ namespace InventoryManagement.WebAPI.Controllers
 
 
         [HttpDelete("{id:int}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var success = _productService.Delete(id);
+            var success = await _productService.Delete(id);
 
             if (!success)
             {

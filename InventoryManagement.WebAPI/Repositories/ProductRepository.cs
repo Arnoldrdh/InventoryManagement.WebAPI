@@ -1,55 +1,41 @@
-﻿using InventoryManagement.WebAPI.Models;
+﻿using InventoryManagement.WebAPI.Data;
+using InventoryManagement.WebAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagement.WebAPI.Repositories;
 
 public class ProductRepository : IProductRepository
 {
-    private readonly List<Product> _products = new();
+    private readonly AppDbContext _context;
 
-    public ProductRepository()
+    public ProductRepository(AppDbContext context)
     {
-        _products.Add(new Product
-        {
-            Id = 1,
-            Name = "Laptop",
-            Price = 15000000,
-            Stock = 5
-        });
+        _context = context;
 
-        _products.Add(new Product
-        {
-            Id = 2,
-            Name = "Mouse",
-            Price = 200000,
-            Stock = 20
-        });
     }
 
-    public List<Product> GetAll()
+    public async Task<List<Product>> GetAll()
     {
-        Console.WriteLine(_products);
-        return _products;
+        return await _context.Products.ToListAsync();
     }
 
-    public Product? GetById(int id)
+    public async Task<Product?> GetById(int id)
     {
-        return _products.FirstOrDefault(p => p.Id == id);
+        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public Product Add(Product product)
+    public async Task<Product> Add(Product product)
     {
-        int nextId = _products.Max(p => p.Id) + 1;
+        _context.Products.Add(product);
 
-        product.Id = nextId;
-
-        _products.Add(product);
+        await _context.SaveChangesAsync();
         return product;
     }
 
-    public Product? Update(Product product)
+    public async Task<Product?> Update(Product product)
     {
-        var existingProduct = _products.FirstOrDefault(prod => prod.Id == product.Id);
-        Console.WriteLine(existingProduct);
+        var existingProduct = _context.Products.FirstOrDefault(prod => prod.Id == product.Id);
+        
         if (existingProduct == null)
         {
             return null;
@@ -59,19 +45,22 @@ public class ProductRepository : IProductRepository
         existingProduct.Price = product.Price;
         existingProduct.Stock = product.Stock;
 
+        await _context.SaveChangesAsync();
+
         return existingProduct;
     }
 
-    public bool Delete(int id)
+    public async Task<bool> Delete(int id)
     {
-        var productDeleted = _products.FirstOrDefault(p => p.Id == id);
+        var productDeleted = _context.Products.FirstOrDefault(p => p.Id == id);
 
         if (productDeleted == null)
         {
             return false;
         }
 
-        _products.Remove(productDeleted);
+        _context.Remove(productDeleted);
+        await _context.SaveChangesAsync();
 
         return true;
     }

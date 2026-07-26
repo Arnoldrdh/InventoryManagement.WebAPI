@@ -12,9 +12,9 @@ namespace InventoryManagement.WebAPI.Services
             _productRepository = productRepository;
         }
 
-        public List<ProductResponse> GetAllProduct()
+        public async Task<List<ProductResponse>> GetAllProduct()
         {
-            var product = _productRepository.GetAll();
+            var product = await _productRepository.GetAll();
 
             return product.Select(product => new ProductResponse
             {
@@ -25,9 +25,9 @@ namespace InventoryManagement.WebAPI.Services
             }).ToList();
         }
 
-        public ProductResponse? GetById(int id)
+        public async Task<ProductResponse?> GetById(int id)
         {
-            var product = _productRepository.GetById(id);
+            var product = await _productRepository.GetById(id);
 
             if (product == null)
                 return null;
@@ -41,7 +41,7 @@ namespace InventoryManagement.WebAPI.Services
             };
         }
 
-        public ProductResponse Create(ProductRequest request)
+        public async Task<ProductResponse> Create(ProductRequest request)
         {
             
 
@@ -52,19 +52,19 @@ namespace InventoryManagement.WebAPI.Services
                 Stock = request.Stock
             };
 
-             _productRepository.Add(product);
+            var productResponse = await _productRepository.Add(product);
 
             return new ProductResponse
             {
-                Id = product.Id,
-                Name = product.Name,
-                Price = product.Price,
-                Stock = product.Stock
+                Id = productResponse.Id,
+                Name = productResponse.Name,
+                Price = productResponse.Price,
+                Stock = productResponse.Stock
             };
         }
 
 
-        public ProductResponse Update(int id, ProductRequest request)
+        public async Task<ProductResponse> Update(int id, ProductRequest request)
         {
             var product = new Product
             {
@@ -73,7 +73,7 @@ namespace InventoryManagement.WebAPI.Services
                 Stock = request.Stock
             };
 
-            var updatedProduct = _productRepository.Update(product);
+            var updatedProduct = await _productRepository.Update(product);
 
             if(updatedProduct == null)
             {
@@ -89,9 +89,9 @@ namespace InventoryManagement.WebAPI.Services
         }
 
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            return _productRepository.Delete(id);
+            return await _productRepository.Delete(id);
         }
 
 
