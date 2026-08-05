@@ -5,10 +5,10 @@ namespace InventoryManagement.WebAPI.Services
 {
     public class ProductService : IProductService
     {
-        private readonly ProductRepository _productRepository;
-        private readonly CategoryRepository _categoryRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository)
+        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;

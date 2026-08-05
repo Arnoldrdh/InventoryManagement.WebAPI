@@ -13,7 +13,7 @@ namespace InventoryManagement.WebAPI.Controllers
     {
         private readonly IProductService _productService;
 
-        public ProductController(ProductService productService)
+        public ProductController(IProductService productService)
         {
             _productService = productService;
         }

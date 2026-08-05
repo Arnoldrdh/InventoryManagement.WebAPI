@@ -24,7 +24,7 @@ public class ProductRepository : IProductRepository
         return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<Product> Add(Product product)
+    public async Task<Product?> Add(Product product)
     {
         _context.Products.Add(product);
 
