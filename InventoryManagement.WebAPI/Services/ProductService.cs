@@ -6,13 +6,15 @@ namespace InventoryManagement.WebAPI.Services
     public class ProductService : IProductService
     {
         private readonly ProductRepository _productRepository;
+        private readonly CategoryRepository _categoryRepository;
 
-        public ProductService(ProductRepository productRepository)
+        public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
-        public async Task<List<ProductResponse>> GetAllProduct()
+        public async Task<List<ProductResponse>> GetAllProducts()
         {
             var product = await _productRepository.GetAll();
 
@@ -43,13 +45,19 @@ namespace InventoryManagement.WebAPI.Services
 
         public async Task<ProductResponse> Create(ProductRequest request)
         {
-            
+            var isCategoryExist = await _categoryRepository.GetById(request.CategoryId);
+
+            if (isCategoryExist == null)
+            {
+                throw new KeyNotFoundException("Category not found.");
+            }
 
             var product = new Product
             {
                 Name = request.Name,
                 Price = request.Price,
-                Stock = request.Stock
+                Stock = request.Stock,
+                CategoryId = request.CategoryId
             };
 
             var productResponse = await _productRepository.Add(product);
@@ -64,7 +72,7 @@ namespace InventoryManagement.WebAPI.Services
         }
 
 
-        public async Task<ProductResponse> Update(int id, ProductRequest request)
+        public async Task<ProductResponse?> Update(int id, ProductRequest request)
         {
             var product = new Product
             {

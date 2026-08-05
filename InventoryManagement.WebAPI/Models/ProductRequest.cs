@@ -14,5 +14,7 @@ namespace InventoryManagement.WebAPI.Models
 
         [Range(1, int.MaxValue)]
         public int Stock { get; set; }
+
+        public int CategoryId { get; set; }
     }
 }
